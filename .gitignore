@@ -1,0 +1,6 @@
+node_modules
+dist
+datos/*
+!datos/ejemplo.json
+.superpowers
+.DS_Store

@@ -1,0 +1,13 @@
+{
+  "n": "Nombre Apellido",
+  "c": "Nombre",
+  "l": "Nombre del lugar",
+  "z": "Ciudad",
+  "m": "Texto para buscar en Google Maps o un link de Maps",
+  "d": "2026-10-17T19:00",
+  "o": "-03:00",
+  "e": "Fiesta",
+  "x": [["Chofer personal", "exclusivo, no se comparte"], ["Enanitos", "no preguntes"], ["Música en vivo", "espero"], ["Asado", "a su gusto"]],
+  "k": "",
+  "t": false
+}
