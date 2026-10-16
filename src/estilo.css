@@ -99,8 +99,9 @@ button { font: inherit; cursor: pointer; border: 0; }
 .aviso-flotante {
   position: fixed;
   left: 50%;
-  bottom: max(22px, env(safe-area-inset-bottom));
+  top: max(16px, env(safe-area-inset-top));
   transform: translateX(-50%);
+  pointer-events: none;
   background: #0d1a2e;
   border: 1px solid var(--neon-dim);
   color: var(--tx);

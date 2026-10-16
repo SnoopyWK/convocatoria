@@ -12,11 +12,17 @@ const OPCIONES = [
 ]
 const temblando = ref(-1)
 const guardando = ref(false)
+const intentos = ref(0)
 
 function intentar(i) {
+  if (guardando.value) return
   temblando.value = -1
   requestAnimationFrame(() => (temblando.value = i))
-  toast('Esta opción es necesaria para el funcionamiento de la fiesta.')
+  intentos.value++
+  if (intentos.value < 3) return toast('Esta opción es necesaria para el funcionamiento de la fiesta.')
+  guardando.value = true
+  toast('Actividad sospechosa detectada. Verificando que seas humana…', 2000)
+  setTimeout(() => emit('seguir'), 2000)
 }
 function guardar() {
   if (guardando.value) return
@@ -27,7 +33,7 @@ function guardar() {
 </script>
 
 <template>
-  <main class="pantalla" style="justify-content: flex-end">
+  <main class="pantalla" style="justify-content: center">
     <section class="caja entrar banner">
       <div class="tag">Tu privacidad nos importa (poco)</div>
       <p class="texto">Usamos enanitos propios y de terceros para mejorar tu experiencia. Podés gestionar tus preferencias.</p>
