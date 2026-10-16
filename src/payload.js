@@ -1,14 +1,27 @@
-// Lee la invitación empaquetada después del # del enlace
-export function leerInvitacion(hash = location.hash) {
+const b64 = (t) => Uint8Array.from(atob(t.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - (t.length % 4)) % 4)), (c) => c.charCodeAt(0))
+
+function valida(d) {
+  return d && d.v === 1 && d.n && d.l && d.d ? d : null
+}
+
+// Enlace corto: #<id>.<llave>; la invitación cifrada vive en i/<id>.json
+async function leerCifrada(id, llave) {
+  const r = await fetch(`${import.meta.env.BASE_URL}i/${id}.json`, { cache: 'no-store' })
+  if (!r.ok) return null
+  const { iv, ct } = await r.json()
+  const k = await crypto.subtle.importKey('raw', b64(llave), 'AES-GCM', false, ['decrypt'])
+  const plano = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(iv) }, k, b64(ct))
+  return valida(JSON.parse(new TextDecoder().decode(plano)))
+}
+
+// Lee la invitación a partir de lo que viene después del # del enlace
+export async function leerInvitacion(hash = location.hash) {
   const raw = hash.replace(/^#/, '')
   if (!raw) return null
   try {
-    const b64 = raw.replace(/-/g, '+').replace(/_/g, '/')
-    const bin = atob(b64 + '='.repeat((4 - (b64.length % 4)) % 4))
-    const json = new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0)))
-    const d = JSON.parse(json)
-    if (d.v !== 1 || !d.n || !d.l || !d.d) return null
-    return d
+    const corto = raw.match(/^([A-Za-z0-9_-]{6,16})\.([A-Za-z0-9_-]{20,64})$/)
+    if (corto) return await leerCifrada(corto[1], corto[2])
+    return valida(JSON.parse(new TextDecoder().decode(b64(raw))))
   } catch {
     return null
   }

@@ -1,6 +1,5 @@
 <script setup>
 import { provide, ref, shallowRef } from 'vue'
-import { leerInvitacion } from './payload.js'
 import { avisar } from './aviso.js'
 import Invitacion from './components/Invitacion.vue'
 import Aceptado from './components/Aceptado.vue'
@@ -14,7 +13,7 @@ import Paso6Carga from './components/pasos/Paso6Carga.vue'
 import Paso7Huye from './components/pasos/Paso7Huye.vue'
 
 const PASOS = [Paso1Segura, Paso2Confusa, Paso3Preferencias, Paso4Captcha, Paso5Terminal, Paso6Carga, Paso7Huye]
-const inv = leerInvitacion()
+const { inv } = defineProps({ inv: Object })
 const clave = inv ? `convocatoria:${inv.k || inv.n}` : ''
 
 function leerGuardada() {
